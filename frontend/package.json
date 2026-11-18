@@ -1,0 +1,86 @@
+{
+  "name": "offline-shared-student-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "homepage": ".",
+  "description": "Unified Offline-First Cross-Platform Student Management React Application for Windows Desktop (Electron) and Android (Capacitor)",
+  "main": "electron/main.js",
+  "dependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/core": "^6.2.0",
+    "@capacitor-community/sqlite": "^6.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "better-sqlite3": "^11.8.1",
+    "cross-env": "^7.0.3",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "wait-on": "^8.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "electron:dev": "cross-env ELECTRON_DEV=true electron .",
+    "electron:run": "electron .",
+    "desktop": "npm run build && electron .",
+    "electron:start": "cross-env NODE_ENV=development concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron:pack": "npm run build && electron-builder --dir",
+    "electron:dist": "npm run build && electron-builder --win --x64",
+    "rebuild:electron": "electron-builder install-app-deps",
+    "rebuild:sqlite": "npx @electron/rebuild -f -w better-sqlite3",
+    "postinstall": "electron-builder install-app-deps",
+    "cap:sync": "npm run build && npx cap sync && node scripts/configure-android-cleartext.js",
+    "cap:open:android": "npx cap open android",
+    "cap:run:android": "npm run build && npx cap sync && node scripts/configure-android-cleartext.js && npx cap run android"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "build": {
+    "appId": "com.offline.studentmanager",
+    "productName": "Offline Student Manager",
+    "directories": {
+      "output": "dist_electron",
+      "buildResources": "build"
+    },
+    "files": [
+      "build/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "public/favicon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Offline Student Manager"
+    }
+  }
+}
